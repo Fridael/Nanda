@@ -28,15 +28,14 @@
   ];
   const byId = id => document.getElementById(id);
   const audio = byId('song-audio');
-  const button = byId('song-play');
   const status = byId('song-status');
-  const offset = byId('lyrics-start');
+  const FIRST_VOCAL_TIME = 30;
   const START_TIME = 25;
-  let active = -1, objectUrl;
+  let active = -1, pendingStart = false, seekAttempts = 0, seekTimer;
   const timeLabel = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
   function sync() {
     // Align the original cue baseline (first vocal at 30s) to this audio file.
-    const now = audio.currentTime + 30 - Number(offset.value);
+    const now = audio.currentTime + 30 - FIRST_VOCAL_TIME;
     let index = 0;
     for(let i=1;i<cues.length && now>=cues[i][0];i++) index=i;
     if(index!==active){
@@ -47,34 +46,35 @@
     }
     byId('song-time').textContent=timeLabel(audio.currentTime||0);
   }
-  function state(){
-    button.textContent=audio.paused?'Play our song ♡':'Pause our song';
-    button.setAttribute('aria-pressed',String(!audio.paused));
+  function seekToStart(){
+    pendingStart=true;seekAttempts=0;applyStart();
+  }
+  function applyStart(){
+    if(!pendingStart || audio.readyState<1 || !Number.isFinite(audio.duration) || audio.duration<=0)return;
+    clearTimeout(seekTimer);
+    const target=Math.min(START_TIME,Math.max(0,audio.duration-.05));
+    if(Math.abs(audio.currentTime-target)<.3){pendingStart=false;sync();return;}
+    if(seekAttempts++>=4){pendingStart=false;status.textContent="Unable to seek yet. Please reload and try again.";return;}
+    audio.currentTime=target;
+    seekTimer=setTimeout(applyStart,350);
+    sync();
   }
   async function play(){
-    try{if(audio.ended)audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);await audio.play();}
-    catch(error){status.textContent=audio.error?'Add song.mp3 to the website folder, or choose your audio file below.':'Tap play to start the music.';}
+    try{if(audio.ended)seekToStart();await audio.play();}
+    catch(error){status.textContent=audio.error?'Audio could not load. Please refresh and try again.':'Tap play to start the music.';}
   }
-  button.addEventListener('click',()=>audio.paused?play():audio.pause());
-  byId('song-restart').addEventListener('click',()=>{audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);sync();});
-  audio.addEventListener('play',()=>{state();status.textContent='Playing · English + Indonesian';});
-  audio.addEventListener('pause',()=>{state();status.textContent='Paused';});
-  audio.addEventListener('ended',()=>{state();status.textContent='A little song, just for you. ♡';});
+  audio.addEventListener('play',()=>{status.textContent='Playing · English + Indonesian';});
+  audio.addEventListener('pause',()=>{status.textContent='Paused';});
+  audio.addEventListener('ended',()=>{status.textContent='A little song, just for you. ♡';});
   audio.addEventListener('timeupdate',sync);
-  audio.addEventListener('seeked',sync);
+  audio.addEventListener('seeked',()=>{sync();if(pendingStart)applyStart();});
+  audio.addEventListener('canplay',()=>{if(pendingStart)applyStart();});
   audio.addEventListener('waiting',()=>{status.textContent='Loading audio…';});
-  audio.addEventListener('error',()=>{state();status.textContent='Add song.mp3 to the website folder, or choose your audio file below.';});
-  function startAtIntro(){audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);sync();play();}
+  audio.addEventListener('error',()=>{status.textContent='Audio could not load. Please refresh and try again.';});
+  function startAtIntro(){seekToStart();play();}
   audio.addEventListener('loadedmetadata',startAtIntro);
-  offset.addEventListener('input',sync);
-  byId('audio-file').addEventListener('change',event=>{
-    const file=event.target.files[0];if(!file)return;
-    audio.pause();
-    if(objectUrl)URL.revokeObjectURL(objectUrl);
-    objectUrl=URL.createObjectURL(file);audio.src=objectUrl;audio.load();
-    status.textContent='Loading your audio…';
-  });
+  window.addEventListener('pagehide',()=>clearTimeout(seekTimer));
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
-  sync();state();
+  sync();
   if(audio.readyState>=1)startAtIntro();
 })();
