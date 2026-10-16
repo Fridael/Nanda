@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta name="theme-color" content="#090509">
   <meta name="description" content="A flowing text heart, made for Nanda.">
-  <title>Nanda Kesayanganku</title>
+  <title>For NANDA — Love in Motion</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ff78b5' d='M32 56 7 31C-9 10 19-4 32 14 45-4 73 10 57 31Z'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="style.css">
   <script src="heart.js" defer></script>
+  <script src="song.js" defer></script>
 </head>
 <body>
   <header class="masthead">
@@ -23,6 +25,21 @@
       <p class="recipient" id="recipient"><span>NANDA</span></p>
       <div class="caption"><h1>my favorite kind of pretty? ya kamu.</h1><p class="love-letter">cantiknya aku, yali yali aku, kesayangan aku, my future wife. Nanda, aku bener-bener sayang kamu, dan hati ini mau aku jaga buat kamu. aku tahu aku bukan sosok yang orang tuamu harapkan, dan aku ngerti kenapa kamu bilang ini nggak mungkin. but i still believe, selama kita tetap berusaha dan jalanin hal-hal baik, selalu ada ruang buat keajaiban. aku nggak tahu akhirnya akan seperti apa, tapi aku masih berharap itu kamu.</p></div>
       <p class="touch-hint" aria-hidden="true">tap anywhere to scatter a little love <span>↗</span></p>
+    </section>
+
+    <section class="song-section" aria-labelledby="song-title">
+      <div class="song-heading"><div><span class="song-eyebrow">A SONG FOR YOU</span><h2 id="song-title">Here With Me <span>— d4vd</span></h2></div><span class="song-heart" aria-hidden="true">♡</span></div>
+      <div class="song-grid">
+        <div class="audio-panel"><span class="audio-note" aria-hidden="true">♫</span><span class="song-eyebrow">JUST YOU, ME &amp; THIS SONG</span><audio id="song-audio" controls autoplay preload="metadata" src="song.mp3">Your browser does not support audio playback.</audio></div>
+        <div class="lyric-card instrumental" id="lyric-card">
+          <div class="lyric-meta"><span>ENGLISH <span aria-hidden="true">/</span> INDONESIAN</span><time id="song-time">0:00</time></div>
+          <div class="lyric-lines"><p id="lyric-en" lang="en">Instrumental intro</p><p id="lyric-id" lang="id"></p></div>
+          <span class="lyric-signature">every word, a little closer to you.</span>
+        </div>
+      </div>
+      <div class="song-actions"><button id="song-play" type="button" aria-pressed="false">Play our song ♡</button><button id="song-restart" type="button">Restart</button></div>
+      <details class="audio-settings"><summary>Audio settings</summary><label>Choose your audio file <input id="audio-file" type="file" accept="audio/*"></label><label>First vocal starts at (seconds) <input id="lyrics-start" type="number" min="0" max="120" step="0.1" value="30"></label><p>Choose a file to preview on this device. To share the music, upload it as song.mp3 with the website files. Match the first vocal time to your audio version.</p></details><p class="song-status" id="song-status" role="status">Press play to listen.</p>
+      <noscript><p>Enable JavaScript to play the song and see synchronized lyrics.</p></noscript>
     </section>
 
     <section class="controls" aria-label="Customize animation">
