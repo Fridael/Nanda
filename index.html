@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090509">
+  <meta name="description" content="A flowing text heart, made for Nanda.">
+  <title>For NANDA — Love in Motion</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ff78b5' d='M32 56 7 31C-9 10 19-4 32 14 45-4 73 10 57 31Z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="heart.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <a class="wordmark" href="./" aria-label="Love in Motion, home"><span class="tiny-heart">♡</span> LOVE IN MOTION<span class="edition">NO. 001</span></a>
+    <span class="header-note"><span class="live-dot"></span> A LITTLE LOVE, ALWAYS MOVING</span>
+  </header>
+
+  <main>
+    <section class="experience" aria-label="Animated text heart">
+      <div class="eyebrow"><span></span> SOME THINGS ARE BETTER FELT <span></span></div>
+      <canvas id="heart" aria-label="LOVE YOU words flowing along a heart-shaped ribbon." role="img"></canvas>
+      <p class="recipient" id="recipient"><span>NANDA</span></p>
+      <div class="caption"><h1>my favorite kind of pretty? ya kamu.</h1><p class="love-letter">cantiknya aku, yali yali aku, kesayangan aku, my future wife. Nanda, aku bener-bener sayang kamu, dan hati ini mau aku jaga buat kamu. aku tahu aku bukan sosok yang orang tuamu harapkan, dan aku ngerti kenapa kamu bilang ini nggak mungkin. but i still believe, selama kita tetap berusaha dan jalanin hal-hal baik, selalu ada ruang buat keajaiban. aku nggak tahu akhirnya akan seperti apa, tapi aku masih berharap itu kamu.</p></div>
+      <p class="touch-hint" aria-hidden="true">tap anywhere to scatter a little love <span>↗</span></p>
+    </section>
+
+    <section class="controls" aria-label="Customize animation">
+      <label class="message-control"><span class="control-label">YOUR WORDS</span><input id="message" type="text" value="LOVE YOU" maxlength="24" autocomplete="off" spellcheck="false" aria-label="Heart text" placeholder="LOVE YOU"></label>
+      <span class="divider" aria-hidden="true"></span>
+      <div class="color-control"><span class="control-label">PALETTE</span><div class="swatches" role="group" aria-label="Text color"><button class="swatch selected" data-color="pink" aria-label="Pink" aria-pressed="true" style="--swatch:#ff83b8"></button><button class="swatch" data-color="lilac" aria-label="Lilac" aria-pressed="false" style="--swatch:#c7a6ff"></button><button class="swatch" data-color="peach" aria-label="Peach" aria-pressed="false" style="--swatch:#ffc79e"></button></div></div>
+      <span class="divider" aria-hidden="true"></span>
+      <label class="mode-control"><span class="control-label">HEART STYLE</span><select id="mode" aria-label="Heart style"><option value="ribbon">Text ribbon</option><option value="layers">Layered heart</option></select></label>
+      <label class="speed-control"><span class="control-label">FLOW <output id="speed-label">1×</output></span><input id="speed" type="range" min="0.3" max="2.4" value="1" step="0.1" aria-label="Text flow speed"></label>
+      <button id="play" class="play-button" aria-label="Pause animation" aria-pressed="false"><svg id="play-icon" width="17" height="17" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><rect x="5" y="4" width="3" height="12" rx="1"></rect><rect x="12" y="4" width="3" height="12" rx="1"></rect></svg><span id="play-text">Pause</span></button>
+    </section>
+  </main>
+
+  <footer><span>MORE THAN JUST WORDS.</span><span>MADE WITH <span class="footer-heart">♡</span> & A LITTLE MAGIC</span></footer>
+  <span id="announcement" class="sr-only" aria-live="polite"></span>
+</body>
+</html>
