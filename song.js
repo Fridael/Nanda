@@ -31,6 +31,7 @@
   const button = byId('song-play');
   const status = byId('song-status');
   const offset = byId('lyrics-start');
+  const START_TIME = 25;
   let active = -1, objectUrl;
   const timeLabel = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
   function sync() {
@@ -51,11 +52,11 @@
     button.setAttribute('aria-pressed',String(!audio.paused));
   }
   async function play(){
-    try{await audio.play();}
+    try{if(audio.ended)audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);await audio.play();}
     catch(error){status.textContent=audio.error?'Add song.mp3 to the website folder, or choose your audio file below.':'Tap play to start the music.';}
   }
   button.addEventListener('click',()=>audio.paused?play():audio.pause());
-  byId('song-restart').addEventListener('click',()=>{audio.currentTime=0;sync();});
+  byId('song-restart').addEventListener('click',()=>{audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);sync();});
   audio.addEventListener('play',()=>{state();status.textContent='Playing · English + Indonesian';});
   audio.addEventListener('pause',()=>{state();status.textContent='Paused';});
   audio.addEventListener('ended',()=>{state();status.textContent='A little song, just for you. ♡';});
@@ -63,7 +64,8 @@
   audio.addEventListener('seeked',sync);
   audio.addEventListener('waiting',()=>{status.textContent='Loading audio…';});
   audio.addEventListener('error',()=>{state();status.textContent='Add song.mp3 to the website folder, or choose your audio file below.';});
-  audio.addEventListener('loadedmetadata',()=>{sync();play();});
+  function startAtIntro(){audio.currentTime=Math.min(START_TIME,audio.duration||START_TIME);sync();play();}
+  audio.addEventListener('loadedmetadata',startAtIntro);
   offset.addEventListener('input',sync);
   byId('audio-file').addEventListener('change',event=>{
     const file=event.target.files[0];if(!file)return;
@@ -74,4 +76,5 @@
   });
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
   sync();state();
+  if(audio.readyState>=1)startAtIntro();
 })();
